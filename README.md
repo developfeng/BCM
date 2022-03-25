@@ -35,8 +35,9 @@ This code should work on PyTorch and based on the widely used [DeepLabV2](https:
 
 (1) Data Preparation.
 
-Download the init seeds data and their masks from: [We will update the pretrained model soon!]
-
+Download the VOC2012 dataset following the guideline from [DeepLabV2](https://github.com/kazuto1011/deeplab-pytorch) and the init pseudo seeds M&G+ from [SDS](https://www.mpi-inf.mpg.de/departments/computer-vision-and-machine-learning/research/weakly-supervised-learning/simple-does-it-weakly-supervised-instance-and-semantic-segmentation).
+ Our pretrained models and the final generated pseudo labels can be download from:
+ 
 (2) Model Training.
 
 #BCM Training
