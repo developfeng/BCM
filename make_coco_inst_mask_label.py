@@ -238,7 +238,7 @@ def convert(xml_files, json_file, mask_dir, train_files, val=False, inst_dir=Non
 
 
 if __name__ == "__main__":
-    source_dir = '/home/chunfeng_song/Documents/mmsegmentation/data/VOCdevkit/VOC2012/' #Edit this to your own dataset path.
+    source_dir = './data/VOCdevkit/VOC2012/' #Edit this to your own dataset path.
     xml_dir = source_dir + 'Annotations' #Path of xml data directory.
     train_or_val= 'trainaug' #trainaug|val
     if train_or_val=='val':
@@ -248,7 +248,7 @@ if __name__ == "__main__":
     else:
         val = False
         inst_dir = None
-        mask_dir = source_dir +'/SegmentationClassAug_GEN' #Path of generated pseudo label directory.
+        mask_dir = './data/gen_labels/FR_95/mask' #Path of generated pseudo label directory.
     train_list = os.path.join(source_dir+'ImageSets/Segmentation', train_or_val + ".txt") #Path of data list directory.
     train_files = [i.strip() for i in open(train_list) if not i.strip() == ' ']
     json_file = './voc_inst_%s.json'%train_or_val #Save to current dir.
