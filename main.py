@@ -408,7 +408,11 @@ def train(config_path, cuda):
 @click.option(
     "--cuda/--cpu", default=True, help="Enable CUDA if available [default: --cuda]"
 )
-def test(config_path, model_path, cuda):
+
+@click.option(
+    "--gen-training", default=False, help="Generating training prediction [default: False]"
+)
+def test(config_path, model_path, cuda, gen_training):
     """
     Evaluation on validation set
     """
@@ -419,13 +423,22 @@ def test(config_path, model_path, cuda):
     torch.set_grad_enabled(False)
 
     # Dataset
-    dataset = get_dataset(CONFIG.DATASET.NAME)(
-        root=CONFIG.DATASET.ROOT,
-        split=CONFIG.DATASET.SPLIT.VAL,
-        ignore_label=CONFIG.DATASET.IGNORE_LABEL,
-        mean_bgr=(CONFIG.IMAGE.MEAN.B, CONFIG.IMAGE.MEAN.G, CONFIG.IMAGE.MEAN.R),
-        augment=False,
-    )
+    if not gen_training:
+        dataset = get_dataset(CONFIG.DATASET.NAME)(
+            root=CONFIG.DATASET.ROOT,
+            split=CONFIG.DATASET.SPLIT.VAL,
+            ignore_label=CONFIG.DATASET.IGNORE_LABEL,
+            mean_bgr=(CONFIG.IMAGE.MEAN.B, CONFIG.IMAGE.MEAN.G, CONFIG.IMAGE.MEAN.R),
+            augment=False,
+        )
+    else:
+        dataset = get_dataset(CONFIG.DATASET.NAME)(
+            root=CONFIG.DATASET.ROOT,
+            split='trainaug',
+            ignore_label=CONFIG.DATASET.IGNORE_LABEL,
+            mean_bgr=(CONFIG.IMAGE.MEAN.B, CONFIG.IMAGE.MEAN.G, CONFIG.IMAGE.MEAN.R),
+            augment=False,
+        )
     print(dataset)
 
     # DataLoader
@@ -448,10 +461,8 @@ def test(config_path, model_path, cuda):
     logit_dir = os.path.join(
         CONFIG.EXP.OUTPUT_DIR,
         "features",
-        CONFIG.EXP.ID,
-        CONFIG.MODEL.NAME.lower(),
-        CONFIG.DATASET.SPLIT.VAL,
         "logit",
+        CONFIG.EXP.NAME,
     )
     makedirs(logit_dir)
     print("Logit dst:", logit_dir)
@@ -461,12 +472,11 @@ def test(config_path, model_path, cuda):
         CONFIG.EXP.OUTPUT_DIR,
         "scores",
         CONFIG.EXP.ID,
-        CONFIG.MODEL.NAME.lower(),
-        CONFIG.DATASET.SPLIT.VAL,
     )
     makedirs(save_dir)
-    save_path = os.path.join(save_dir, "scores.json")
+    save_path = os.path.join(save_dir, 'scores_'+CONFIG.EXP.NAME+'_%s'%datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')+'.json')
     print("Score dst:", save_path)
+
 
     preds, gts = [], []
     for image_ids, images, gt_labels, boxes in tqdm(
@@ -507,14 +517,6 @@ def test(config_path, model_path, cuda):
     type=click.File(),
     required=True,
     help="Dataset configuration file in YAML",
-)
-@click.option(
-    "-j",
-    "--n-jobs",
-    type=int,
-    default=multiprocessing.cpu_count(),
-    show_default=True,
-    help="Number of parallel jobs",
 )
 
 def gen(config_path):
@@ -594,11 +596,11 @@ def gen(config_path):
             pre_fix,
             "im",
         )
-        crf_dir = os.path.join(
+        seed_dir = os.path.join(
             CONFIG.EXP.OUTPUT_DIR,
             "gen_labels",
             pre_fix,
-            "crf",
+            "seed",
         )
         box_dir = os.path.join(
             CONFIG.EXP.OUTPUT_DIR,
@@ -610,8 +612,8 @@ def gen(config_path):
             makedirs(mask_dir)
         if not os.path.exists(im_dir):
             makedirs(im_dir)
-        if not os.path.exists(crf_dir):
-            makedirs(crf_dir)
+        if not os.path.exists(seed_dir):
+            makedirs(seed_dir)
         if not os.path.exists(box_dir):
             makedirs(box_dir)
     if gen_prob_mask:
@@ -659,7 +661,7 @@ def gen(config_path):
 
             # For better comparison with original data.
             os.system('cp %s %s' % (os.path.join(CONFIG.DATASET.ROOT,'VOC2012','JPEGImages', image_id + '.jpg'), os.path.join(im_dir, image_id + ".jpg")))
-            os.system('cp %s %s' % (os.path.join(CONFIG.DATASET.ROOT,'VOC2012','SegmentationClassAug_MG', image_id + '.png'), os.path.join(crf_dir, image_id + ".png")))
+            os.system('cp %s %s' % (os.path.join(CONFIG.DATASET.ROOT,'VOC2012','SegmentationClassAug_MG', image_id + '.png'), os.path.join(seed_dir, image_id + ".png")))
             os.system('cp %s %s' % (os.path.join(CONFIG.DATASET.ROOT,'VOC2012','SegmentationClassAug_Box', image_id + '.png'), os.path.join(box_dir, image_id + ".png")))
 
         print('---->%d of %d'%(i, len(dataset)))
