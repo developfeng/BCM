@@ -35,7 +35,7 @@ This code should work on PyTorch and based on the widely used [DeepLabV2](https:
 
 (1) Data Preparation.
 
-Download the init seeds data and their masks from:
+Download the init seeds data and their masks from: [We will update the pretrained model soon!]
 
 (2) Model Training.
 
