@@ -4,7 +4,6 @@
 * Code Version 1.0                                                             
 * E-mail: chunfeng.song@nlpr.ia.ac.cn                                          
 ---------------------------------------------------------------------------------
-![img](https://github.com/developfeng/BCM/tree/main/data/pseudo_label.png)
 
 i.    Overview
 ii.   Copying
