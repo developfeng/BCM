@@ -5,7 +5,7 @@ EXP:
 
 DATASET:
     NAME: vocaugbox
-    ROOT: /home/chunfeng_song/Documents/mmsegmentation/data/VOCdevkit/
+    ROOT: ./data/VOCdevkit/
     #Path of the VOCdevkit
     LABELS: ./data/datasets/voc12/labels.txt
     N_CLASSES: 21
