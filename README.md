@@ -13,11 +13,11 @@ i. OVERVIEW
 -----------------------------
 This code implements our paper [[PDF]](https://ieeexplore.ieee.org/abstract/document/10202580):
 
->Weakly Supervised Semantic Segmentation via Box-driven Masking and Filling Rate Shifting, IEEE TPAMI, 2023.
+>Weakly Supervised Semantic Segmentation via Box-driven Masking and Filling Rate Shifting. IEEE TPAMI, 2023.
 
 and reimplement the Conference Version with PyTorch [[PDF]](https://openaccess.thecvf.com/content_CVPR_2019/papers/Song_Box-Driven_Class-Wise_Region_Masking_and_Filling_Rate_Guided_Loss_for_CVPR_2019_paper.pdf):
 
->Box-driven Class-wise Region Masking and Filling Rate Guided Loss for Weakly Supervised Semantic Segmentation, CVPR, 2019.
+>Box-driven Class-wise Region Masking and Filling Rate Guided Loss for Weakly Supervised Semantic Segmentation. CVPR, 2019.
 
 
 If you find this work is helpful for your research, please cite our papers.
